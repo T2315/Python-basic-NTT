@@ -152,3 +152,84 @@ fi.close()
 3 6 
 6 4 3 2 1 
 ```
+
+
+## 📫 Bài tập mới
+#### Đề bài
+THI GIỮA KỲ II
+
+Cho tệp dữ liệu data.inp gồm:
+
+Dòng đầu tiên, chứa số nguyên n là số lượng học sinh của lớp.
+n dòng tiếp theo, mỗi dòng chứa dữ liệu thông tin gồm:
+Họ và tên đầy đủ của học sinh.
+Điểm trung bình (có 2 chữ số thập phân).
+Viết chương trình đọc dữ liệu từ tệp data.inp và ghi vào tệp data.out gồm:
+
+Dòng đầu tiên ghi họ và tên của bạn có điểm trung bình cao nhất.
+Sắp xếp lại danh sách học sinh kèm điểm trung bình theo thứ tự tên tăng dần.
+
+
+#### Code
+```python
+# Do mỗi phần tử trong mảng là một mảng con của 2 phần tử [họ tên, điểm]
+# Nên để sắp xếp theo tên thì ta phải lấy ra phần tử đầu tiên là họ tên
+# Dùng split() để tách họ tên thành mảng gồm : họ, tên lót, tên
+# sau đó thêm [-1] đằng sau để lấy ra tên làm tiêu trí so sánh để sắp xếp
+# Nên ta mới có điều kiện : A[j][0].split()[-1] > A[j+1][0].split()[-1]
+def BubbleSort(A):
+    n = len(A)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if A[j][0].split()[-1] > A[j+1][0].split()[-1]: A[j], A[j+1] = A[j+1], A[j]
+            
+fi = open("data.inp", "r", encoding = "utf-8")
+ 
+# Đọc số nguyên n
+n = int(fi.readline())
+ 
+# Mảng chứa danh sách học sinh của lớp
+dshs = []
+
+for i in range(n):
+    # Đọc sanh sách học sinh của lớp, chia thông tin mỗi học sinh ra thành mảng theo khoảng trẳng
+    # Ví dụ: "Nguyen Van A 7.88" => ["Nguyen", "Van", "A", "7.88"]
+    hs = fi.readline().split()
+    
+    # hs[:-1] = lấy từ mảng trên từ đầu đến phần tử kế cuối, bỏ phần tử cuối do nó là điểm
+    # Ví dụ kết quả hs[:-1] => ["Nguyen", "Van", "A"]
+    
+    # join để kết hợp mảng thành chuỗi bằng dấu sách
+    # Ví dụ ["Nguyen", "Van", "A"] (sau khi " ".join() ta sẽ được) "Nguyen Van A" 
+    ten = " ".join(hs[:-1])
+    
+    # hs[-1] lấy ra phần tử cuối cùng là điểm 
+    diem = float(hs[-1])
+    
+    # chúng vào mảng dshs, mỗi phần tử là một mảng có 2 thông tin tách biệt [tên, điểm] 
+    dshs.append([ten, diem])
+
+fo = open("data.out", "w", encoding="utf-8")
+
+# Tìm họ và tên bạn có điểm trung bình cao nhất 
+max = 0 # Biến để lưu lại điểm trung bình cao nhất
+ten = "" # Biến lưu lại tên của học sinh có điểm trung bình cao nhất
+
+# Lặp qua dshs sau đó ở mỗi phần tử lấy ra điểm để so sánh nếu điểm đó lớn hơn max thì thay max bằng điểm của học sinh đó và gán lại tên
+for i in range(n):
+    if dshs[i][1] > max:
+        max = dshs[i][1]
+        ten = dshs[i][0]
+        
+fo.write(ten +"\n")
+
+# Gọi hàm sắp xếp tăng dần theo điểm 
+BubbleSort(dshs)
+# In ra danh sách học sinh đã sắp xếp 
+for i in range(n):
+    fo.write(str(dshs[i][0]) + " " + str(dshs[i][1]) + "\n")
+
+
+fi.close()
+fo.close()
+```
